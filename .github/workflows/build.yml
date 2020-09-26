@@ -10,6 +10,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-18.04
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: Get Git and Python 2.7
@@ -19,7 +22,9 @@ jobs:
         run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
       
       - name: Add depot tools to PATH
-        run: export PATH=$(pwd)/depot_tools:$PATH
+        run: |
+          echo "::add-path::$(pwd)/depot_tools"
+          echo $PATH
 
       - name: Checkout WebRTC
         run: |
