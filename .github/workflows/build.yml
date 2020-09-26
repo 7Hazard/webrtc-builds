@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Get Git and Python 2.7
-        run: apt install git python
+        run: sudo apt install git python
 
       - name: Get depot tools
         run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
