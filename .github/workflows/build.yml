@@ -1,0 +1,43 @@
+
+name: CI
+
+on:
+  push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Get Git and Python 2.7
+        run: apt install git python
+
+      - name: Get depot tools
+        run: git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+      
+      - name: Add depot tools to PATH
+        run: export PATH=$(pwd)/depot_tools:$PATH
+
+      - name: Checkout WebRTC
+        run: |
+          mkdir webrtc-checkout
+          cd webrtc-checkout
+          fetch --nohooks webrtc
+          gclient sync
+      
+      - name: Get required tools
+        run: ./build/install-build-deps.sh
+        working-directory: ./webrtc-checkout/src
+      
+      - name: Generate debug build
+        run: gn gen out/Debug
+        working-directory: ./webrtc-checkout/src
+      
+      - name: Build debug build
+        run: ninja -C out/Debug
+        working-directory: ./webrtc-checkout/src
+      
+      
